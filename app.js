@@ -1,17 +1,19 @@
 //jshint esversion: 6
-// mailchimp-key ----> ca7506e19f66875cb8bcb1f45906f3c5-us21
-// list id -----> 741ec40c1b
+// mailchimp-key ----> 
+// list id -----> 
 const express = require("express");
 const bodyParser = require("body-parser");
 //const request = require("request");
+require('dotenv').config();
 const https = require("https");
-const port = process.env.PORT;
 const app = express();
-
+const mailChimpKey = process.env.MAIL_CHIMP_KEY;
+const listId = process.env.LIST_ID;
+const port = process.env.PORT; 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static("public")); // permite que o express carregue a pasta passada de arquivos estáticos
 
-app.listen(port || 3000, () =>{
+app.listen(port, () =>{
     console.log(`Example app listening on port ${port}`);
 });
 
@@ -36,10 +38,10 @@ app.post("/", (req, res) => {
         ]
     }
     const jsonData = JSON.stringify(data);
-    const url = "https://us21.api.mailchimp.com/3.0/lists/741ec40c1b";
+    const url = "https://us21.api.mailchimp.com/3.0/lists/"+listId;
     const options = {
         method: "POST",
-        auth: "yvesls:ca7506e19f66875cb8bcb1f45906f3c5-us21"
+        auth: "yvesls:"+mailChimpKey
     };
     const request = https.request(url, options, (response)=>{
         response.on("data", (data) => {
